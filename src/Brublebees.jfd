@@ -1,0 +1,96 @@
+JFDML JFormDesigner: "5.2.5.0.333" Java: "1.8.0_112" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
+			"$columnSpecs": "default, labelcompgap, default, labelcompgap, default, labelcompgap, default:grow, labelcompgap, default, labelcompgap, default:grow"
+			"$rowSpecs": "default, linegap, default"
+		} ) {
+			name: "this"
+			"title": "WAN LINKS"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "name1"
+				"text": "text"
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 1
+				"gridY": 1
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "status1"
+				"text": "text"
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 3
+				"gridY": 1
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "delta1in"
+				"text": "text"
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 5
+				"gridY": 1
+			} )
+			add( new FormComponent( "javax.swing.JProgressBar" ) {
+				name: "progressBar1in"
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 7
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "delta1out"
+				"text": "text"
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 9
+				"gridY": 1
+			} )
+			add( new FormComponent( "javax.swing.JProgressBar" ) {
+				name: "progressBar1out"
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 11
+				"gridY": 1
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "name2"
+				"text": "text"
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 1
+				"gridY": 3
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "status2"
+				"text": "text"
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 3
+				"gridY": 3
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "delta2in"
+				"text": "text"
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 5
+				"gridY": 3
+			} )
+			add( new FormComponent( "javax.swing.JProgressBar" ) {
+				name: "progressBar2in"
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 7
+				"gridY": 3
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "delta2out"
+				"text": "text"
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 9
+				"gridY": 3
+			} )
+			add( new FormComponent( "javax.swing.JProgressBar" ) {
+				name: "progressBar2out"
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 11
+				"gridY": 3
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 415, 75 )
+		} )
+	}
+}
