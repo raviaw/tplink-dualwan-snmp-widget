@@ -1,3 +1,4 @@
+import javax.swing.*;
 import com.jgoodies.forms.factories.CC;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -98,112 +99,91 @@ public class SpeedForm extends JDialog
     private void initComponents()
     {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        name1 = new JLabel();
-        status1 = new JLabel();
-        delta1in = new JLabel();
-        progressBar1in = new JProgressBar();
-        delta1out = new JLabel();
-        progressBar1out = new JProgressBar();
-        name2 = new JLabel();
-        status2 = new JLabel();
-        delta2in = new JLabel();
-        progressBar2in = new JProgressBar();
-        delta2out = new JLabel();
-        progressBar2out = new JProgressBar();
-        name3 = new JLabel();
-        status3 = new JLabel();
-        delta3in = new JLabel();
-        progressBar3in = new JProgressBar();
-        delta3out = new JLabel();
-        progressBar3out = new JProgressBar();
+		name1 = new JLabel();
+		status1 = new JLabel();
+		delta1in = new JLabel();
+		progressBar1in = new JProgressBar();
+		delta1out = new JLabel();
+		progressBar1out = new JProgressBar();
+		name2 = new JLabel();
+		status2 = new JLabel();
+		delta2in = new JLabel();
+		progressBar2in = new JProgressBar();
+		delta2out = new JLabel();
+		progressBar2out = new JProgressBar();
+		name3 = new JLabel();
+		status3 = new JLabel();
+		delta3in = new JLabel();
+		progressBar3in = new JProgressBar();
+		delta3out = new JLabel();
+		progressBar3out = new JProgressBar();
 
-        //======== this ========
-        setTitle( "WAN LINKS" );
-        Container contentPane = getContentPane();
-        contentPane.setLayout(
-            new FormLayout(
-                "3*(default, $lcgap), default:grow, $lcgap, default, $lcgap, default:grow",
-                "2*(default, $lgap), default"
-            )
-        );
+		//======== this ========
+		setTitle("WAN LINKS");
+		Container contentPane = getContentPane();
+		contentPane.setLayout(new FormLayout(
+			"3*(default, $lcgap), default:grow, $lcgap, default, $lcgap, default:grow",
+			"2*(default, $lgap), default"));
 
-        //---- name1 ----
-        name1.setText( "text" );
-        contentPane.add( name1, CC.xy( 1, 1 ) );
+		//---- name1 ----
+		name1.setText("text");
+		contentPane.add(name1, CC.xy(1, 1));
 
-        //---- status1 ----
-        status1.setText( "text" );
-        contentPane.add( status1, CC.xy( 3, 1 ) );
+		//---- status1 ----
+		status1.setText("text");
+		contentPane.add(status1, CC.xy(3, 1));
+		contentPane.add(delta1in, CC.xy(5, 1));
+		contentPane.add(progressBar1in, CC.xy(7, 1));
+		contentPane.add(delta1out, CC.xy(9, 1));
+		contentPane.add(progressBar1out, CC.xy(11, 1));
 
-        //---- delta1in ----
-        delta1in.setText( "text" );
-        contentPane.add( delta1in, CC.xy( 5, 1 ) );
-        contentPane.add( progressBar1in, CC.xy( 7, 1 ) );
+		//---- name2 ----
+		name2.setText("text");
+		contentPane.add(name2, CC.xy(1, 3));
 
-        //---- delta1out ----
-        delta1out.setText( "text" );
-        contentPane.add( delta1out, CC.xy( 9, 1 ) );
-        contentPane.add( progressBar1out, CC.xy( 11, 1 ) );
+		//---- status2 ----
+		status2.setText("text");
+		contentPane.add(status2, CC.xy(3, 3));
+		contentPane.add(delta2in, CC.xy(5, 3));
+		contentPane.add(progressBar2in, CC.xy(7, 3));
+		contentPane.add(delta2out, CC.xy(9, 3));
+		contentPane.add(progressBar2out, CC.xy(11, 3));
 
-        //---- name2 ----
-        name2.setText( "text" );
-        contentPane.add( name2, CC.xy( 1, 3 ) );
+		//---- name3 ----
+		name3.setText("text");
+		contentPane.add(name3, CC.xy(1, 5));
 
-        //---- status2 ----
-        status2.setText( "text" );
-        contentPane.add( status2, CC.xy( 3, 3 ) );
-
-        //---- delta2in ----
-        delta2in.setText( "text" );
-        contentPane.add( delta2in, CC.xy( 5, 3 ) );
-        contentPane.add( progressBar2in, CC.xy( 7, 3 ) );
-
-        //---- delta2out ----
-        delta2out.setText( "text" );
-        contentPane.add( delta2out, CC.xy( 9, 3 ) );
-        contentPane.add( progressBar2out, CC.xy( 11, 3 ) );
-
-        //---- name3 ----
-        name3.setText( "text" );
-        contentPane.add( name3, CC.xy( 1, 5 ) );
-
-        //---- status3 ----
-        status3.setText( "text" );
-        contentPane.add( status3, CC.xy( 3, 5 ) );
-
-        //---- delta3in ----
-        delta3in.setText( "text" );
-        contentPane.add( delta3in, CC.xy( 5, 5 ) );
-        contentPane.add( progressBar3in, CC.xy( 7, 5 ) );
-
-        //---- delta3out ----
-        delta3out.setText( "text" );
-        contentPane.add( delta3out, CC.xy( 9, 5 ) );
-        contentPane.add( progressBar3out, CC.xy( 11, 5 ) );
-        pack();
-        setLocationRelativeTo( getOwner() );
+		//---- status3 ----
+		status3.setText("text");
+		contentPane.add(status3, CC.xy(3, 5));
+		contentPane.add(delta3in, CC.xy(5, 5));
+		contentPane.add(progressBar3in, CC.xy(7, 5));
+		contentPane.add(delta3out, CC.xy(9, 5));
+		contentPane.add(progressBar3out, CC.xy(11, 5));
+		pack();
+		setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    private JLabel name1;
-    private JLabel status1;
-    private JLabel delta1in;
-    private JProgressBar progressBar1in;
-    private JLabel delta1out;
-    private JProgressBar progressBar1out;
-    private JLabel name2;
-    private JLabel status2;
-    private JLabel delta2in;
-    private JProgressBar progressBar2in;
-    private JLabel delta2out;
-    private JProgressBar progressBar2out;
-    private JLabel name3;
-    private JLabel status3;
-    private JLabel delta3in;
-    private JProgressBar progressBar3in;
-    private JLabel delta3out;
-    private JProgressBar progressBar3out;
+	private JLabel name1;
+	private JLabel status1;
+	private JLabel delta1in;
+	private JProgressBar progressBar1in;
+	private JLabel delta1out;
+	private JProgressBar progressBar1out;
+	private JLabel name2;
+	private JLabel status2;
+	private JLabel delta2in;
+	private JProgressBar progressBar2in;
+	private JLabel delta2out;
+	private JProgressBar progressBar2out;
+	private JLabel name3;
+	private JLabel status3;
+	private JLabel delta3in;
+	private JProgressBar progressBar3in;
+	private JLabel delta3out;
+	private JProgressBar progressBar3out;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
     class Delta
