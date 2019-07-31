@@ -97,6 +97,7 @@ lateinit var form: SpeedForm
  */
 fun main(args: Array<String>) {
   val gatewayIp = File("gateway-ip.txt").readText(Charsets.UTF_8)
+  val interval = File("interval.txt").readText(Charsets.UTF_8).toLong()
   println("gateway: " + gatewayIp)
   val target = CommunityTarget<Address>()
   target.setCommunity(OctetString("public"))
@@ -110,7 +111,7 @@ fun main(args: Array<String>) {
 
   thread(
     isDaemon = true,
-    block = { updateVariables(target) }
+    block = { updateVariables(target, interval) }
   )
 
 /*
@@ -137,7 +138,7 @@ fun main(args: Array<String>) {
 */
 }
 
-private fun updateVariables(target: CommunityTarget<Address>) {
+private fun updateVariables(target: CommunityTarget<Address>, interval: Long) {
   var wan1InLast: List<Long?>? = null
   var wan2InLast: List<Long?>? = null
   var wan3InLast: List<Long?>? = null
@@ -195,9 +196,9 @@ private fun updateVariables(target: CommunityTarget<Address>) {
     println("wan2.in: ${wan2InDelta}")
     println("wan3.in: ${wan3InDelta}")
 
-    SwingUtilities.invokeLater { form.updateControls(60000) }
+    SwingUtilities.invokeLater { form.updateControls(interval) }
 
-    Thread.sleep(60000)
+    Thread.sleep(interval)
 
     wan1InLast = wan1InCurrent ?: wan1InLast
     wan2InLast = wan2InCurrent ?: wan2InLast
