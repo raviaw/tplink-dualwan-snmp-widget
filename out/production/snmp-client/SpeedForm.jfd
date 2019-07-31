@@ -5,7 +5,7 @@ new FormModel {
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
 			"$columnSpecs": "default, labelcompgap, default, labelcompgap, default, labelcompgap, default:grow, labelcompgap, default, labelcompgap, default:grow"
-			"$rowSpecs": "default, linegap, default"
+			"$rowSpecs": "default, linegap, default, linegap, default"
 		} ) {
 			name: "this"
 			"title": "WAN LINKS"
@@ -52,7 +52,6 @@ new FormModel {
 				name: "name2"
 				"text": "text"
 			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
-				"gridX": 1
 				"gridY": 3
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -88,9 +87,48 @@ new FormModel {
 				"gridX": 11
 				"gridY": 3
 			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "name3"
+				"text": "text"
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridY": 5
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "status3"
+				"text": "text"
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 3
+				"gridY": 5
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "delta3in"
+				"text": "text"
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 5
+				"gridY": 5
+			} )
+			add( new FormComponent( "javax.swing.JProgressBar" ) {
+				name: "progressBar3in"
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 7
+				"gridY": 5
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "delta3out"
+				"text": "text"
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 9
+				"gridY": 5
+			} )
+			add( new FormComponent( "javax.swing.JProgressBar" ) {
+				name: "progressBar3out"
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 11
+				"gridY": 5
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 415, 75 )
+			"size": new java.awt.Dimension( 415, 95 )
 		} )
 	}
 }

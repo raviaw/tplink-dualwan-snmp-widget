@@ -11,11 +11,13 @@ import org.snmp4j.smi.VariableBinding
 import org.snmp4j.transport.DefaultUdpTransportMapping
 import org.snmp4j.util.DefaultPDUFactory
 import org.snmp4j.util.TreeUtils
+import java.io.File
 import java.io.IOException
 import java.util.TreeMap
 import javax.swing.SwingUtilities
 import kotlin.concurrent.thread
 import kotlin.reflect.KMutableProperty
+import kotlin.reflect.KProperty
 import kotlin.reflect.full.declaredMemberProperties
 
 val use64 = true
@@ -80,25 +82,30 @@ val reverseDatabase = database.map { it -> it.value to it.key }.toMap()
 
 var linkWan1: Int? = null
 var linkWan2: Int? = null
+var linkWan3: Int? = null
 var wan1InDelta: Long? = null
 var wan2InDelta: Long? = null
+var wan3InDelta: Long? = null
 var wan1OutDelta: Long? = null
 var wan2OutDelta: Long? = null
+var wan3OutDelta: Long? = null
 
-lateinit var form: Brublebees
+lateinit var form: SpeedForm
 
 /**
  * @author [Ravi Wallau](mailto:raviw@emerald-associates.com)
  */
 fun main(args: Array<String>) {
+  val gatewayIp = File("gateway-ip.txt").readText(Charsets.UTF_8)
+  println("gateway: " + gatewayIp)
   val target = CommunityTarget<Address>()
   target.setCommunity(OctetString("public"))
-  target.setAddress(GenericAddress.parse("udp:192.168.10.1/161")) // supply your own IP and port
+  target.setAddress(GenericAddress.parse("udp:${gatewayIp}/161")) // supply your own IP and port
   target.setRetries(2)
   target.setTimeout(1500)
   target.setVersion(SnmpConstants.version2c)
 
-  form = Brublebees()
+  form = SpeedForm()
   form.isVisible = true
 
   thread(
@@ -131,10 +138,12 @@ fun main(args: Array<String>) {
 }
 
 private fun updateVariables(target: CommunityTarget<Address>) {
-  var wan1InLast: Long? = null
-  var wan2InLast: Long? = null
-  var wan1OutLast: Long? = null
-  var wan2OutLast: Long? = null
+  var wan1InLast: List<Long?>? = null
+  var wan2InLast: List<Long?>? = null
+  var wan3InLast: List<Long?>? = null
+  var wan1OutLast: List<Long?>? = null
+  var wan2OutLast: List<Long?>? = null
+  var wan3OutLast: List<Long?>? = null
   while (true) {
     val result = doWalk(".${prefix}", target) // ifTable, mib-2 interfaces
 
@@ -152,45 +161,77 @@ private fun updateVariables(target: CommunityTarget<Address>) {
         property.setter.call(index, value)
       }
     }
-    val indexMap = indexes.associateBy { it.ifName }
-    val wan1 = indexMap["pppoe-wan1_poe"]
-    val wan2 = indexMap["pppoe-wan2_poe"]
-    val wan1InCurrent = wan1?.ifHCInOctets?.toLong()
-    val wan2InCurrent = wan2?.ifHCInOctets?.toLong()
-    val wan1OutCurrent = wan1?.ifHCOutOctets?.toLong()
-    val wan2OutCurrent = wan2?.ifHCOutOctets?.toLong()
+    for (index in indexes) {
+      println(index)
+      println()
+      println()
+    }
+    val indexMap = indexes.groupBy { it.ifName }
+    val wan1InCurrent = readMax(indexMap, Parameters::ifHCInOctets, "pppoe-wan1_poe", "wan1_poe")
+    val wan2InCurrent = readMax(indexMap, Parameters::ifHCInOctets, "pppoe-wan2_poe", "wan2_poe")
+    val wan3InCurrent = readMax(indexMap, Parameters::ifHCInOctets, "pppoe-wan3_poe", "wan3_poe")
+    val wan1OutCurrent = readMax(indexMap, Parameters::ifHCOutOctets, "pppoe-wan1_poe", "wan1_poe")
+    val wan2OutCurrent = readMax(indexMap, Parameters::ifHCOutOctets, "pppoe-wan2_poe", "wan2_poe")
+    val wan3OutCurrent = readMax(indexMap, Parameters::ifHCOutOctets, "pppoe-wan3_poe", "wan3_poe")
 
-    linkWan1 = wan1?.ifConnectorPresent?.toInt()
-    linkWan2 = wan2?.ifConnectorPresent?.toInt()
+    if (wan1InCurrent.isNotEmpty()) wan1InDelta = delta(wan1InCurrent, wan1InLast)
+    if (wan2InCurrent.isNotEmpty()) wan2InDelta = delta(wan2InCurrent, wan2InLast)
+    if (wan3InCurrent.isNotEmpty()) wan3InDelta = delta(wan3InCurrent, wan3InLast)
+    if (wan1OutCurrent.isNotEmpty()) wan1OutDelta = delta(wan1OutCurrent, wan1OutLast)
+    if (wan2OutCurrent.isNotEmpty()) wan2OutDelta = delta(wan2OutCurrent, wan2OutLast)
+    if (wan3OutCurrent.isNotEmpty()) wan3OutDelta = delta(wan3OutCurrent, wan3OutLast)
 
-    if (wan1InCurrent != null) wan1InDelta = delta(wan1InCurrent, wan1InLast)
-    if (wan2InCurrent != null) wan2InDelta = delta(wan2InCurrent, wan2InLast)
-    if (wan1OutCurrent != null) wan1OutDelta = delta(wan1OutCurrent, wan1OutLast)
-    if (wan2OutCurrent != null) wan2OutDelta = delta(wan2OutCurrent, wan2OutLast)
+    linkWan1 = if ((wan1InDelta != null && wan1InDelta!! > 0) || (wan1OutDelta != null && wan1OutDelta!! > 0)) 1 else 0
+    linkWan2 = if ((wan2InDelta != null && wan2InDelta!! > 0) || (wan2OutDelta != null && wan2OutDelta!! > 0)) 1 else 0
+    linkWan3 = if ((wan3InDelta != null && wan3InDelta!! > 0) || (wan3OutDelta != null && wan3OutDelta!! > 0)) 1 else 0
 
     println("wan1.link: ${linkWan1}")
     println("wan2.link: ${linkWan2}")
+    println("wan3.link: ${linkWan3}")
     println("wan1.in: ${wan1InDelta}")
     println("wan2.in: ${wan2InDelta}")
+    println("wan3.in: ${wan3InDelta}")
     println("wan1.out: ${wan1OutDelta}")
-    println("wan2.out: ${wan2OutDelta}")
+    println("wan2.in: ${wan2InDelta}")
+    println("wan3.in: ${wan3InDelta}")
 
-    SwingUtilities.invokeLater { form.updateControls(10000) }
+    SwingUtilities.invokeLater { form.updateControls(60000) }
 
-    Thread.sleep(10000)
+    Thread.sleep(60000)
 
     wan1InLast = wan1InCurrent ?: wan1InLast
     wan2InLast = wan2InCurrent ?: wan2InLast
+    wan3InLast = wan3InCurrent ?: wan3InLast
     wan1OutLast = wan1OutCurrent ?: wan1OutLast
     wan2OutLast = wan2OutCurrent ?: wan2OutLast
+    wan3OutLast = wan3OutCurrent ?: wan3OutLast
   }
 }
 
-fun delta(current: Long?, last: Long?): Long {
-  if (current == null || last == null) {
+private fun readMax(indexMap: Map<String?, List<Parameters>>, property: KProperty<String?>, vararg keys: String): List<Long?> {
+  val parameters = indexMap.filter { keys.contains(it.key) }.values.flatten()
+  val values = parameters.map { property.getter.call(it) }
+  println(property.name + ": " + values)
+  return values.filterNotNull().map { it.toLong() }
+}
+
+fun delta(current: List<Long?>?, last: List<Long?>?): Long {
+  if (current == null || current.isEmpty() || last == null || last.isEmpty()) {
     return 0
   }
-  return current - last
+  val comparisonPairs = mutableListOf<Pair<Long, Long>>()
+  for (v1 in current) {
+    if (v1 == null) {
+      continue
+    }
+    val v2 = last.filterNotNull().sortedBy { Math.abs(it - v1) }.firstOrNull()
+    if (v2 == null) {
+      continue
+    }
+    comparisonPairs.add(Pair(v1, v2))
+  }
+  val delta = comparisonPairs.map { Math.abs(it.first - it.second) }.max()
+  return delta ?: 0
 }
 
 @Throws(IOException::class)

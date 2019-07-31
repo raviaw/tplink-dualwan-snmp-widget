@@ -8,30 +8,34 @@ import java.awt.Color;
  */
 import java.awt.Container;
 
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 
 
 /*
  * Created by JFormDesigner on Tue Jul 30 01:11:43 BRT 2019
  */
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
 
 /**
  * @author User #4
  */
-public class Brublebees extends JFrame
+public class SpeedForm extends JDialog
 {
-    public Brublebees()
+    public SpeedForm()
     {
         initComponents();
         name1.setText( "WAN1" );
         name2.setText( "WAN2" );
+        name3.setText( "WAN3" );
         status1.setOpaque( true );
         status2.setOpaque( true );
-        setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+        status3.setOpaque( true );
+        setAlwaysOnTop( true );
+        setDefaultCloseOperation( JDialog.DISPOSE_ON_CLOSE );
+        //setOpacity( 0.70F );
     }
 
     public void updateControls( final int waitTimeMs )
@@ -43,6 +47,10 @@ public class Brublebees extends JFrame
         if( SnmpClientTestKt.getLinkWan2() != null ) {
             status2.setBackground( SnmpClientTestKt.getLinkWan2() == 0 ? Color.RED : Color.GREEN );
             status2.setText( SnmpClientTestKt.getLinkWan2() == 0 ? "OFF" : "ON" );
+        }
+        if( SnmpClientTestKt.getLinkWan3() != null ) {
+            status3.setBackground( SnmpClientTestKt.getLinkWan3() == 0 ? Color.RED : Color.GREEN );
+            status3.setText( SnmpClientTestKt.getLinkWan3() == 0 ? "OFF" : "ON" );
         }
         final int megabyte = ( 1000 * 1000 ) / 8;
         if( SnmpClientTestKt.getWan1InDelta() != null && SnmpClientTestKt.getWan1OutDelta() != null ) {
@@ -61,18 +69,26 @@ public class Brublebees extends JFrame
             progressBar2out.setValue( ( int )( outDelta.percentage * 100 ) );
             delta2out.setText( formatDeltaText( outDelta.delta ) );
         }
+        if( SnmpClientTestKt.getWan3InDelta() != null && SnmpClientTestKt.getWan3OutDelta() != null ) {
+            final Delta inDelta = calculateStatusBar( SnmpClientTestKt.getWan3InDelta(), waitTimeMs, ( 60 ) * megabyte );
+            final Delta outDelta = calculateStatusBar( SnmpClientTestKt.getWan3OutDelta(), waitTimeMs, ( 60 ) * megabyte );
+            progressBar3in.setValue( ( int )( inDelta.percentage * 100 ) );
+            delta3in.setText( formatDeltaText( inDelta.delta ) );
+            progressBar3out.setValue( ( int )( outDelta.percentage * 100 ) );
+            delta3out.setText( formatDeltaText( outDelta.delta ) );
+        }
     }
 
-    private String formatDeltaText( long delta )
+    private String formatDeltaText( double delta )
     {
-        final double mb = delta / ( 1024 * 1024 );
+        final double mb = delta / ( 1000.0 * 1000.0 );
         return String.format( "%.2f MB/s", mb );
     }
 
     private Delta calculateStatusBar( final long delta, final int waitTimeMs, final long max )
     {
         final int divide = waitTimeMs / 1000;
-        final long bySec = delta / divide;
+        final double bySec = ( double )delta / ( double )divide;
         final double percentage = ( double )bySec / ( double )max;
         System.out.println( "total: " + delta + ", bySec: " + bySec + ", max: " + max + ", percentage: " + percentage );
 
@@ -94,6 +110,12 @@ public class Brublebees extends JFrame
         progressBar2in = new JProgressBar();
         delta2out = new JLabel();
         progressBar2out = new JProgressBar();
+        name3 = new JLabel();
+        status3 = new JLabel();
+        delta3in = new JLabel();
+        progressBar3in = new JProgressBar();
+        delta3out = new JLabel();
+        progressBar3out = new JProgressBar();
 
         //======== this ========
         setTitle( "WAN LINKS" );
@@ -101,7 +123,7 @@ public class Brublebees extends JFrame
         contentPane.setLayout(
             new FormLayout(
                 "3*(default, $lcgap), default:grow, $lcgap, default, $lcgap, default:grow",
-                "default, $lgap, default"
+                "2*(default, $lgap), default"
             )
         );
 
@@ -140,6 +162,24 @@ public class Brublebees extends JFrame
         delta2out.setText( "text" );
         contentPane.add( delta2out, CC.xy( 9, 3 ) );
         contentPane.add( progressBar2out, CC.xy( 11, 3 ) );
+
+        //---- name3 ----
+        name3.setText( "text" );
+        contentPane.add( name3, CC.xy( 1, 5 ) );
+
+        //---- status3 ----
+        status3.setText( "text" );
+        contentPane.add( status3, CC.xy( 3, 5 ) );
+
+        //---- delta3in ----
+        delta3in.setText( "text" );
+        contentPane.add( delta3in, CC.xy( 5, 5 ) );
+        contentPane.add( progressBar3in, CC.xy( 7, 5 ) );
+
+        //---- delta3out ----
+        delta3out.setText( "text" );
+        contentPane.add( delta3out, CC.xy( 9, 5 ) );
+        contentPane.add( progressBar3out, CC.xy( 11, 5 ) );
         pack();
         setLocationRelativeTo( getOwner() );
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -158,14 +198,20 @@ public class Brublebees extends JFrame
     private JProgressBar progressBar2in;
     private JLabel delta2out;
     private JProgressBar progressBar2out;
+    private JLabel name3;
+    private JLabel status3;
+    private JLabel delta3in;
+    private JProgressBar progressBar3in;
+    private JLabel delta3out;
+    private JProgressBar progressBar3out;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
     class Delta
     {
-        final long delta;
+        final double delta;
         final double percentage;
 
-        public Delta( long delta, double percentage )
+        public Delta( double delta, double percentage )
         {
             this.delta = delta;
             this.percentage = percentage;
