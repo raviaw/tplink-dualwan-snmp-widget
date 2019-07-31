@@ -38,7 +38,7 @@ public class SpeedForm extends JDialog
         //setOpacity( 0.70F );
     }
 
-    public void updateControls( final int waitTimeMs )
+    public void updateControls( final long waitTimeMs )
     {
         if( SnmpClientTestKt.getLinkWan1() != null ) {
             status1.setBackground( SnmpClientTestKt.getLinkWan1() == 0 ? Color.RED : Color.GREEN );
@@ -85,9 +85,9 @@ public class SpeedForm extends JDialog
         return String.format( "%.2f MB/s", mb );
     }
 
-    private Delta calculateStatusBar( final long delta, final int waitTimeMs, final long max )
+    private Delta calculateStatusBar( final long delta, final long waitTimeMs, final long max )
     {
-        final int divide = waitTimeMs / 1000;
+        final long divide = waitTimeMs / 1000;
         final double bySec = ( double )delta / ( double )divide;
         final double percentage = ( double )bySec / ( double )max;
         System.out.println( "total: " + delta + ", bySec: " + bySec + ", max: " + max + ", percentage: " + percentage );

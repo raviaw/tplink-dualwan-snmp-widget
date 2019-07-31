@@ -1,0 +1,3 @@
+Set your gateway in the gateway-ip.txt file - use only a single line with its IP and nothing else
+Set your wait time in the interval.txt file in milliseconds. Setting an interval shorter than 30000 ms is innefective as the SNMP server can't response that fast. Or at least it seems like that.
+You need Java 9 to run this program. Change the script "run.cmd" so that it has your proper Java installation path in it.
